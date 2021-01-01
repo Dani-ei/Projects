@@ -29,32 +29,32 @@ def random_line(f_name):  # Used for picking generating random email
 
 def send_mail(day_number, today_date1, late_excuse=""):
     file_random = random.choice(os.listdir(image_dir))
-    msg2 = EmailMessage()  # creating an object of EmailMessage class
-    msg2['Subject'] = f'Day {day_number} of the project'
-    msg2['From'] = Sender_Email  # Defining sender email
-    msg2['To'] = Receiver_Email  # Defining receiver email
-    msg2.set_content(f'''<pre><h3>{random_line('Greeting.txt')} Dani,</h3>
-<p style = "font-family:candara,times,helvetica; font-size:14px;">today is day <b>{day_number}</b> since you started this project. 
-This is the email for date <b>{today_date1}</b>. 
-
-{random_line('Quote_intro.txt')}
-<i>{random_line('Quote.txt')}</i>
-
-{random_line('Picture_intro.txt')}
-
-{random_line('Farewell.txt')} :)
-{late_excuse}
-
-Until tomorrow,
-<p style = "font-family:candara,times,helvetica; font-size:14px; color:#FF0000;"><i>your fateful servant</i></p></pre>''', subtype="html")
+    msg = EmailMessage()  # creating an object of EmailMessage class
+    msg['Subject'] = f'Day {day_number} of the project'
+    msg['From'] = Sender_Email  # Defining sender email
+    msg['To'] = Receiver_Email  # Defining receiver email
+    msg.set_content(f'''
+        <hr />
+        <h3 style="text-align: center;"><span style="color: #0000ff;">{random_line('Greeting.txt')} Master</span>,</h3>
+        <p style="text-align: center; font-size: 16px;">today is day <strong>{day_number}</strong> since you started 
+        this project. 
+        This is the email for date <strong>{today_date1}</strong>.</p>
+        <p style="text-align: center; font-size: 16px;">{random_line('Quote_intro.txt')}<br />
+        <em style="font-size: 17px;">{random_line('Quote.txt')}</em></p>
+        <p style="text-align: center; font-size: 16px;">{random_line('Picture_intro.txt')}</p>
+        <p style="text-align: center; font-size: 16px;">{random_line('Farewell.txt')} 😊
+        <br />{late_excuse}</p>
+        <p style="text-align: center; font-size: 16px;">Until tomorrow,<br />
+        <span style="color: #ff0000;"><em>your fateful servant</em></span></p>
+        <hr />''', subtype="html")
     with open(image_dir + "\\" + file_random, 'rb') as f1:
         image_data = f1.read()
         image_type = imghdr.what(f1.name)
         image_name = f1.name
-    msg2.add_attachment(image_data, maintype='image', subtype=image_type, filename=image_name)
+    msg.add_attachment(image_data, maintype='image', subtype=image_type, filename=image_name)
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
         smtp.login(Sender_Email, Password)  # Login to SMTP server
-        smtp.send_message(msg2)  # Sending email using send_message method by passing EmailMessage object
+        smtp.send_message(msg)  # Sending email using send_message method by passing EmailMessage object
     print(f"Email {day_number} of the project has been sent.")
 
 
